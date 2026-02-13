@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-sisdb2025
+    environment:
+      MYSQL_ROOT_PASSWORD: abcd
+      MYSQL_DATABASE: sisdb2025
+    ports:
+      - "3307:3306"
+
+  backend:
+    image: examen-backend-app
+    container_name: examen-backend
+    ports:
+      - "8097:8097"
+    depends_on:
+      - mysql
+
+  frontend:
+    image: examen-frontend-app
+    container_name: examen-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: examen-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: examen-backend
+  template:
+    metadata:
+      labels:
+        app: examen-backend
+    spec:
+      containers:
+        - name: backend
+          image: examen-backend-app
+          ports:
+            - containerPort: 8097
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:mysql://mysql-service:3306/sisdb2025?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "root"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: "abcd"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  type: NodePort
+  selector:
+    app: examen-backend
+  ports:
+    - port: 8097
+      targetPort: 8097
+      nodePort: 30097
